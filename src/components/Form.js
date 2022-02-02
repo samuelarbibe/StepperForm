@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
 import * as Yup from 'yup'
+import React, { useState } from 'react'
 import { Formik, useFormikContext } from 'formik'
+
+import { Save, Send } from '@material-ui/icons'
 import { FormControlLabel, IconButton, makeStyles, Switch } from '@material-ui/core'
 
 import Step from './Step/Step'
@@ -11,7 +13,7 @@ import EnvironmentStep from './Steps/EnvironmentStep'
 import DeploymentStep from './Steps/DeploymentStep'
 import RegularFormCard from './RegularFormCard'
 import SummaryStep from './Steps/SummaryStep'
-import { Save, Send } from '@material-ui/icons'
+import TagsStep from './Steps/TagsStep'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,15 +36,16 @@ const initialDemand = {
     family: '',
     revision: ''
   },
-  desiredTasks: 1
+  desiredTasks: 1,
+  tags: []
 }
 
-const validationSchema = Yup.object().shape({
+const validationSchema = Yup.object({
   cluster: Yup.string().nullable().required(),
   launchType: Yup.string().nullable().required(),
   platformVersion: Yup.string().nullable().required(),
   applicationType: Yup.string().nullable().required(),
-  taskDefinition: Yup.object().shape({
+  taskDefinition: Yup.object({
     family: Yup.string().nullable().required('Task family is required'),
     revision: Yup.string().nullable().required('Task revision is required')
   }),
@@ -54,7 +57,11 @@ const validationSchema = Yup.object().shape({
   desiredTasks: Yup.number()
     .min(0, 'Desired tasks must be positive')
     .max(5, 'Desired tasks must be 5 or lower')
-    .required()
+    .required(),
+  tags: Yup.array().of(Yup.object({
+    key: Yup.string().required(''),
+    value: Yup.string().required(''),
+  }))
 })
 
 const FormActions = ({ isWizard }) => {
@@ -101,6 +108,9 @@ const MyForm = () => {
                   <Step label='Deployment configuration'>
                     <DeploymentStep />
                   </Step>
+                  <Step label='Tags'>
+                    <TagsStep />
+                  </Step>
                   <Step label='Summary'>
                     <SummaryStep />
                   </Step>
@@ -110,6 +120,7 @@ const MyForm = () => {
                 <RegularFormCard>
                   <EnvironmentStep />
                   <DeploymentStep />
+                  <TagsStep />
                 </RegularFormCard>
               )
           }

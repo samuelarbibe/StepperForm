@@ -18,15 +18,15 @@ const TextInput = ({ label, required, debounce = 100, description, helperText, .
 
   return (
     <FormControl required={required} margin='normal'>
-      <FormLabel>{label}</FormLabel>
+      {label && <FormLabel>{label}</FormLabel>}
       {description && <FormHelperText >{description}</FormHelperText>}
       <TextField
         size='small'
         margin='dense'
         variant='outlined'
         {...field}
-        {...props}
         {...(debounce && { onChange: handleOnChange, value })}
+        {...props}
       />
       {error && <FormHelperText error>{error}</FormHelperText>}
       {helperText && <FormHelperText >{helperText}</FormHelperText>}

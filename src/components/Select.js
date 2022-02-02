@@ -22,13 +22,12 @@ const Select = ({ label, required, helperText, description, ...props }) => {
 
   return (
     <FormControl required={required} margin='normal' >
-      <FormLabel id={`${label}-select-label`}>{label}</FormLabel>
+      <FormLabel>{label}</FormLabel>
       {description && <FormHelperText>{description}</FormHelperText>}
       <Autocomplete
         className={classes.select}
         autoComplete
         size='small'
-        labelId={`${label}-select-label`}
         variant='outlined'
         renderValue={(selected) => selected.join(', ')}
         {...field}

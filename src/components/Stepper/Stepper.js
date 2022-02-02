@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Box, Button, makeStyles, Step as MuiStep, StepLabel, Stepper as MuiStepper } from '@material-ui/core'
 import { StepperContext } from './StepperContext'
 
@@ -11,7 +11,6 @@ const useStyles = makeStyles((theme) => ({
   },
   header: {
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'space-between',
     padding: theme.spacing(2),
     borderBottom: '1px solid',
@@ -36,18 +35,20 @@ const useStyles = makeStyles((theme) => ({
 
 const Stepper = ({ children }) => {
   const classes = useStyles()
-  const [isStepValid, setIsStepValid] = useState(false)
+  const [isStepValid, setIsStepValid] = useState({})
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
 
-  const steps = React.Children.map((children), (child) => {
-    if (React.isValidElement(child)) {
-      return React.cloneElement(child, { setIsValid: setIsStepValid })
-    }
-    return child
-  })
+  const setIsStepValidByIndex = useCallback((index, isValid) => setIsStepValid((prev) => ({ ...prev, [index]: isValid })), [])
+
+  const steps = useMemo(() => React.Children.map((children), (child, index) => {
+    if (!React.isValidElement(child)) throw Error('Invalid step react element given to stepper')
+
+    const setIsValid = (isValid) => setIsStepValidByIndex(index, isValid)
+    return React.cloneElement(child, { index, setIsValid })
+  }), [children, setIsStepValidByIndex])
 
   const currentStep = steps[currentStepIndex]
-  const canNext = currentStepIndex + 1 < steps.length && isStepValid
+  const canNext = currentStepIndex + 1 < steps.length && isStepValid[currentStepIndex]
 
   const prev = () => {
     setCurrentStepIndex((prev) => prev - 1)
