@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'stretch',
-    width: theme.breakpoints.values.sm,
+    maxWidth: theme.breakpoints.values.sm,
     border: '1px solid',
     borderColor: theme.palette.divider,
   },
