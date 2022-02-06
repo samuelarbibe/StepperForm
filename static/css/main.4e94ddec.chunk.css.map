@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/index.css"],"names":[],"mappings":"AAAA,KAEE,QACF,CAEA,UAJE,YAOF,CAHA,KAEE,sBACF,CAEA,MACE,YAAa,CACb,QACF","file":"main.4e94ddec.chunk.css","sourcesContent":["html {\n  height: 100vh;\n  margin: 0px;\n}\n\nbody {\n  height: 100vh;\n  margin-top: 0px!important;\n}\n\n#root {\n  height: 100vh;\n  margin: 0px;\n}"]}
