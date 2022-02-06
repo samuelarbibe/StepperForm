@@ -14,6 +14,7 @@ import DeploymentStep from './Steps/DeploymentStep'
 import RegularFormCard from './RegularFormCard'
 import SummaryStep from './Steps/SummaryStep'
 import TagsStep from './Steps/TagsStep'
+import DraftStep from './Steps/DraftStep'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +38,26 @@ const initialDemand = {
     revision: ''
   },
   desiredTasks: 1,
-  tags: []
+  tags: [
+    {
+      key: 'An example key',
+      value: 'An example value'
+    }
+  ],
+  notes: {
+    'blocks': [
+      {
+        'key': '4tnjb',
+        'text': 'This is some initial value that has been loaded from the DB as json!',
+        'type': 'unstyled',
+        'depth': 0,
+        'inlineStyleRanges': [],
+        'entityRanges': [],
+        'data': {}
+      }
+    ],
+    'entityMap': {}
+  },
 }
 
 const validationSchema = Yup.object({
@@ -61,7 +81,8 @@ const validationSchema = Yup.object({
   tags: Yup.array().of(Yup.object({
     key: Yup.string().required(''),
     value: Yup.string().required(''),
-  }))
+  })),
+  notes: Yup.object()
 })
 
 const FormActions = ({ isWizard }) => {
@@ -78,7 +99,7 @@ const FormActions = ({ isWizard }) => {
 
 const MyForm = () => {
   const classes = useStyles()
-  const [isWizard, setIsWizard] = useState(true)
+  const [isWizard, setIsWizard] = useState(false)
 
   return (
     <div className={classes.root}>
@@ -108,8 +129,9 @@ const MyForm = () => {
                   <Step label='Deployment configuration'>
                     <DeploymentStep />
                   </Step>
-                  <Step label='Tags'>
+                  <Step label='Tags & notes'>
                     <TagsStep />
+                    <DraftStep />
                   </Step>
                   <Step label='Summary'>
                     <SummaryStep />
@@ -121,10 +143,11 @@ const MyForm = () => {
                   <EnvironmentStep />
                   <DeploymentStep />
                   <TagsStep />
-                </RegularFormCard>
+                  <DraftStep />
+                </RegularFormCard >
               )
           }
-        </FormCard>
+        </FormCard >
       </Formik >
     </div >
   )
